@@ -1,8 +1,13 @@
+version: '3.8'
+
 services:
   app:
     build:
       context: ./docker-example
       dockerfile: prod.Dockerfile
+      # Dodanie tej linii wymusza ponowne zbudowanie obrazu przy każdej zmianie
+      args:
+        - CACHEBUST=$(date +%s)
     volumes:
       - db-data:/app/data
       - upload-data:/app/uploaded_files
@@ -28,11 +33,14 @@ services:
     environment:
       DOMAIN: ${DOMAIN:-localhost}
     ports:
-      - 8444:443
-      - 8081:80
+      - 8444:443  # Zmiana portu na 8444
+      - 8081:80   # Zmiana portu na 8081
     build:
       context: ./docker-example
       dockerfile: Caddy.Dockerfile
+      # Dodanie tej linii wymusza ponowne zbudowanie obrazu przy każdej zmianie
+      args:
+        - CACHEBUST=$(date +%s)
     volumes:
       - caddy-data:/root/.caddy
     restart: always
