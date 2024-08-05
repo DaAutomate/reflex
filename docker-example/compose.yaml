@@ -5,9 +5,8 @@ services:
     build:
       context: ./docker-example
       dockerfile: prod.Dockerfile
-      # Dodanie tej linii wymusza ponowne zbudowanie obrazu przy każdej zmianie
       args:
-        - CACHEBUST=$(date +%s)
+        - BUILD_ID=${BUILD_ID:-default_build_id}
     volumes:
       - db-data:/app/data
       - upload-data:/app/uploaded_files
@@ -38,9 +37,8 @@ services:
     build:
       context: ./docker-example
       dockerfile: Caddy.Dockerfile
-      # Dodanie tej linii wymusza ponowne zbudowanie obrazu przy każdej zmianie
       args:
-        - CACHEBUST=$(date +%s)
+        - BUILD_ID=${BUILD_ID:-default_build_id}
     volumes:
       - caddy-data:/root/.caddy
     restart: always
